@@ -1,5 +1,10 @@
 const express = require('express')
 const colors = require('colors')
+const connectDB = require('./config/dbConfig')
+const dotenv = require('dotenv').config()
+
+
+connectDB()
 
 const app = express()
 
