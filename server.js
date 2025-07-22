@@ -12,6 +12,10 @@ const app = express();
 // Other middleware
 app.use(express.json());
 
+
+app.use(require('cors')())
+
+
 //Routes
 app.use("/api/users", userRoutes);
 app.use("/api/exams", examRoutes);

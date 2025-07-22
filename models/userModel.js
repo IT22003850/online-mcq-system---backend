@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema(
       unique: true,
     },
   },
-  { timetamps: true }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model('User', userSchema);
