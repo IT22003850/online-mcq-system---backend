@@ -4,6 +4,9 @@ const connectDB = require("./config/dbConfig");
 const dotenv = require("dotenv").config();
 const userRoutes = require("./routes/userRoutes");
 const examRoutes = require("./routes/examRoutes");
+const resultsRoutes = require('./routes/resultsRoute')
+
+const PORT = process.env.PORT;
 
 connectDB();
 
@@ -12,14 +15,13 @@ const app = express();
 // Other middleware
 app.use(express.json());
 
-
-app.use(require('cors')())
-
+app.use(require("cors")());
 
 //Routes
 app.use("/api/users", userRoutes);
 app.use("/api/exams", examRoutes);
+app.use("/api/results", resultsRoutes)
 
-app.listen(5000, () => {
-  console.log(`Server is listning to port: 5000`.blue);
+app.listen(PORT, () => {
+  console.log(`Server is listning to port: ${PORT}`.blue);
 });
