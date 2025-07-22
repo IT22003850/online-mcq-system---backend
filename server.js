@@ -7,7 +7,7 @@ const examRoutes = require("./routes/examRoutes");
 const resultsRoutes = require("./routes/resultsRoute");
 const cors = require("cors");
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
 connectDB();
 
