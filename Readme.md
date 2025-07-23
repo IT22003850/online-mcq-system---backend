@@ -1,138 +1,114 @@
 # Online MCQ System - Backend
 
 ## Overview
-
-The backend for the Online MCQ System is a Node.js/Express application that provides APIs for managing exams, questions, user authentication, and results. It uses MongoDB (MongoDB Atlas or local) for data storage and supports user registration, login, exam submission, and result history retrieval.
+The backend of the Online MCQ System is a Node.js application built with Express.js and MongoDB. It provides APIs for user authentication, exam management, question retrieval, answer submission, and result tracking. The application uses JWT for authentication and Mongoose for MongoDB interactions.
 
 ## Features
-
-- **User Authentication**: Register and login users with JWT-based authentication.
-- **Exams and Questions**: Manage multiple-choice exams and questions.
-- **Result Tracking**: Store and retrieve user exam results and answers.
-- **Protected Routes**: Secure API endpoints with JWT middleware.
-- **Database Seeding**: Seed the database with sample exams, questions, and users.
-
-## Technologies
-
-- Node.js
-- Express.js
-- MongoDB (Mongoose)
-- JSON Web Tokens (JWT)
-- dotenv
-- colors
+- User registration and login with JWT authentication
+- Exam management (listing exams, fetching questions)
+- Answer submission and score calculation
+- Result history tracking
+- Protected routes using middleware
+- Data seeding for initial setup
 
 ## Prerequisites
-
 - Node.js (v16 or higher)
-- MongoDB (local or MongoDB Atlas account)
-- npm
+- MongoDB (local or cloud instance)
+- npm (Node Package Manager)
 
-## Setup Instructions
-
-1. **Clone the Repository** (if applicable):
+## Installation
+1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd online-mcq-system --backend
+   git clone https://github.com/IT22003850/online-mcq-system---backend.git
+   cd online-mcq-system-backend
    ```
 
-2. **Install Dependencies**:
+2. Install dependencies:
    ```bash
    npm install
    ```
-   Required dependencies (in `package.json`):
-   ```json
-   {
-     "dependencies": {
-       "express": "^4.17.1",
-       "mongoose": "^7.0.0",
-       "dotenv": "^17.2.0",
-       "colors": "^1.4.0",
-       "express-async-handler": "^1.2.0",
-       "jsonwebtoken": "^9.0.0"
-     },
-     "devDependencies": {
-       "nodemon": "^3.1.10"
-     }
-   }
+
+3. Create a `.env` file in the root directory and add the following environment variables:
+   ```env
+   PORT=5000
+   MONGO_URI=<your-mongodb-connection-string>
+   JWT_SECRET=<your-jwt-secret-key>
    ```
 
-3. **Configure Environment Variables**:
-   - Create a `.env` file in the project root:
-     ```env
-     MONGO_URI=mongodb+srv://<username>:<password>@ac-be1hqnf-shard-00-01.wcjz58d.mongodb.net/online-mcq-system?retryWrites=true&w=majority
-     JWT_SECRET=your_jwt_secret_here
-     PORT=5000
-     ```
-   - For local MongoDB, use `MONGO_URI=mongodb://localhost:27017/online-mcq-system` and start MongoDB:
-     ```bash
-     mongod
-     ```
+4. Seed the database with initial data:
+   ```bash
+   node seed.js
+   ```
 
-4. **Seed the Database**:
-   - Run the seed script to populate the database with 3 exams, 15 questions, and 1 user:
-     ```bash
-     node seed.js
-     ```
-   - Expected output: `Database seeded successfully`.
-
-5. **Start the Server**:
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
+   Or start the production server:
    ```bash
    npm start
    ```
-   - The server runs on `http://localhost:5000` with `nodemon` for auto-restart.
+
+## Project Structure
+```
+online-mcq-system-backend/
+├── config/
+│   └── dbConfig.js          # MongoDB connection setup
+├── controllers/
+│   ├── examController.js    # Exam-related API logic
+│   ├── resultsController.js # Result-related API logic
+│   ├── userController.js    # User authentication logic
+├── middlewares/
+│   └── authMiddleware.js    # JWT authentication middleware
+├── models/
+│   ├── answerModel.js       # Answer schema
+│   ├── examModel.js         # Exam schema
+│   ├── questionModel.js     # Question schema
+│   ├── resultModel.js       # Result schema
+│   ├── userModel.js         # User schema
+├── routes/
+│   ├── examRoutes.js        # Exam API routes
+│   ├── resultsRoute.js      # Result API routes
+│   ├── userRoutes.js        # User API routes
+├── seed.js                  # Database seeding script
+├── server.js                # Main server file
+├── package.json             # Project dependencies and scripts
+├── .env                     # Environment variables (not committed)
+```
 
 ## API Endpoints
+### User Routes
+- `POST /api/users` - Register a new user
+- `POST /api/users/login` - Login user and return JWT
+- `GET /api/users/me` - Get current user details (protected)
 
-- **POST /api/users/register**: Register a new user (body: `{ "name": "string", "email": "string" }`).
-- **POST /api/users/login**: Login user and get JWT (body: `{ "name": "string", "email": "string" }`).
-- **GET /api/exams**: Get all exams (protected).
-- **GET /api/exams/:examId/questions**: Get questions for an exam (protected).
-- **POST /api/exams/:examId/submit**: Submit exam answers (protected, body: `{ "answers": [{ "question_id": "string", "selected_option": number }]`).
-- **GET /api/results/:userId**: Get user’s result history (protected).
+### Exam Routes
+- `GET /api/exams` - Fetch all exams (protected)
+- `GET /api/exams/:examId/questions` - Fetch questions for an exam (protected)
+- `POST /api/exams/:examId/submit` - Submit answers for an exam (protected)
 
-## Directory Structure
+### Result Routes
+- `GET /api/results/:userId` - Fetch user's result history (protected)
 
-```
-online-mcq-system --backend/
-├── config/
-│   └── dbConfig.js
-├── controllers/
-│   └── examController.js
-├── middlewares/
-│   └── authMiddleware.js
-├── models/
-│   ├── examModel.js
-│   ├── questionModel.js
-│   ├── userModel.js
-│   ├── resultModel.js
-│   └── answerModel.js
-├── routes/
-│   ├── examRoutes.js
-│   └── userRoutes.js
-├── .env
-├── server.js
-├── seed.js
-└── package.json
-```
+## Dependencies
+- `express`: Web framework for Node.js
+- `mongoose`: MongoDB object modeling
+- `jsonwebtoken`: JWT authentication
+- `express-async-handler`: Async error handling for Express
+- `cors`: Enable Cross-Origin Resource Sharing
+- `dotenv`: Environment variable management
+- `colors`: Console output styling
+- `nodemon`: Development server auto-restart (dev dependency)
 
-## Testing
+## Scripts
+- `npm run dev`: Start development server with nodemon
+- `npm start`: Start production server
+- `node seed.js`: Seed database with initial data
 
-- Use Postman to test APIs:
-  - Login to get a JWT token: `POST http://localhost:5000/api/users/login`.
-  - Use token in `Authorization: Bearer <token>` for protected routes.
-- Verify database:
-  ```bash
-  mongo
-  use online-mcq-system
-  db.users.find()
-  db.exams.find()
-  db.questions.find()
-  db.results.find()
-  ```
+## Deployment
+The backend is deployed on Railway at `https://online-mcq-system-backend-production.up.railway.app`. Ensure the `.env` file is properly configured with the production MongoDB URI and JWT secret.
 
-## Troubleshooting
-
-- **MongoDB Connection Error**: Ensure `MONGO_URI` is correct in `.env` and MongoDB is running.
-- **401 Unauthorized**: Verify JWT token in request headers and user exists in database.
-- **500 Internal Server Error**: Check server logs for details (e.g., missing models or invalid data).
-- Contact: `serendilabs@gmail.com` for support.
+## Notes
+- Ensure MongoDB is running before starting the server.
+- The seed script clears existing data before adding new exams, questions, and users.
+- All protected routes require a valid JWT in the `Authorization` header as `Bearer <token>`.
